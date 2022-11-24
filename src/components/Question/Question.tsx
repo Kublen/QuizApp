@@ -1,23 +1,26 @@
 import React, { ReactElement, useCallback, useState } from "react";
-import { TQuestion } from "../../interfaces/interfaces";
+import { TQuestion } from "../../common/interfaces/interfaces";
 import "./Question.styles.scss";
+import QuestionButton from "./QuestionButton/QuestionButton";
+import QuestionInput from "./QuestionInput/QuestionInput";
 
 type Props = {
   question: TQuestion;
-  setAnswer: (value: number) => void;
+  onSubmit: (value: number) => void;
   isLastQuestion: boolean;
 };
 
 const Question = ({
   question,
-  setAnswer,
+  onSubmit,
   isLastQuestion,
 }: Props): ReactElement => {
-  const [selectedVal, setSelectedVal] = useState<number>();
+  const [selectedVal, setSelectedVal] = useState<number | null>(null);
 
-  const onSubmit = useCallback(() => {
-    if (selectedVal) setAnswer(selectedVal);
-  }, [selectedVal, setAnswer]);
+  const onSubmitVal = useCallback(() => {
+    if (selectedVal) onSubmit(selectedVal);
+    setSelectedVal(null);
+  }, [onSubmit, selectedVal]);
 
   return (
     <div className="">
@@ -25,22 +28,21 @@ const Question = ({
       <div>
         {question.answers.map((answer, index) => {
           return (
-            <>
-              <input
-                type="radio"
-                id={`answer_${index}`}
-                value={answer}
-                checked={selectedVal === answer}
-                onChange={() => setSelectedVal(answer)}
-              />
-              {answer}
-            </>
+            <QuestionInput
+              key={`key_${index}`}
+              answer={answer}
+              index={index}
+              selectedVal={selectedVal}
+              setSelectedVal={setSelectedVal}
+            />
           );
         })}
       </div>
-      <button disabled={!selectedVal} onClick={() => onSubmit()}>
-        {!isLastQuestion ? <>NEXT</> : <>FINISH</>}
-      </button>
+      <QuestionButton
+        isDisabled={!selectedVal}
+        isLastQuestion={isLastQuestion}
+        onSubmit={onSubmitVal}
+      />
     </div>
   );
 };

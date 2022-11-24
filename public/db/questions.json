@@ -1,0 +1,22 @@
+[
+  {
+    "question": "1+1",
+    "answers": [1, 2, 3, 4]
+  },
+  {
+    "question": "2+2",
+    "answers": [1, 2, 3, 4]
+  },
+  {
+    "question": "3+3",
+    "answers": [6, 3, 9, 12]
+  },
+  {
+    "question": "4+4",
+    "answers": [4, 2, 8, 6]
+  },
+  {
+    "question": "5+5",
+    "answers": [25, 20, 10, 40]
+  }
+]

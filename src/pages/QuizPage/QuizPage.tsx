@@ -2,13 +2,16 @@ import React, { ReactElement, useCallback, useEffect, useState } from "react";
 import Question from "../../components/Question/Question";
 import Results from "../../components/Results/Results";
 import { TQuestion } from "../../common/interfaces/interfaces";
-import { fetchAnswers, fetchQuestions } from "../../common/requests/requests";
+import {
+  fetchCorrectAnswers,
+  fetchQuestions,
+} from "../../common/requests/requests";
 import "./QuizPage.styles.scss";
 
 const QuizPage = (): ReactElement => {
-  const [userAnswers, setUserAnswers] = useState<number[]>([]);
   const [questions, setQuestions] = useState<TQuestion[]>([]);
-  const [correctAnswers, setCorrectAnswers] = useState<number[]>([]);
+  const [userAnswers, setUserAnswers] = useState<number[]>([]);
+  const [correctAnswers, setCorrectAnswers] = useState<number[] | null>(null);
   const [step, setStep] = useState<number>(0);
 
   useEffect(() => {
@@ -19,34 +22,35 @@ const QuizPage = (): ReactElement => {
 
   const onSubmit = useCallback(
     (value: number) => {
-      if (step < questions.length) {
-        const newAnswers = [...userAnswers, value];
-        setUserAnswers(newAnswers);
-        setStep(step + 1);
-      } else {
-        fetchAnswers().then((data) => {
+      const newAnswers = [...userAnswers, value];
+      setUserAnswers(newAnswers);
+      if (step === questions.length - 1) {
+        fetchCorrectAnswers().then((data) => {
           setCorrectAnswers(data);
         });
       }
+      setStep(step + 1);
     },
     [questions.length, step, userAnswers]
   );
 
   return (
-    <div className="">
-      {step < questions.length ? (
-        <>
-          {questions[step] && (
-            <Question
-              question={questions[step]}
-              onSubmit={onSubmit}
-              isLastQuestion={step === questions.length - 1}
-            />
-          )}
-        </>
-      ) : (
-        <Results userAnswers={userAnswers} correctAnswers={correctAnswers} />
-      )}
+    <div className="quiz-page__wrapper">
+      <div className="quiz-page__content">
+        {step < questions.length ? (
+          <>
+            {questions[step] && (
+              <Question
+                question={questions[step]}
+                onSubmit={onSubmit}
+                isLastQuestion={step === questions.length - 1}
+              />
+            )}
+          </>
+        ) : (
+          <Results userAnswers={userAnswers} correctAnswers={correctAnswers} />
+        )}
+      </div>
     </div>
   );
 };

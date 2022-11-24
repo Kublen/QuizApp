@@ -4,7 +4,7 @@ import QuizPage from "./pages/QuizPage/QuizPage";
 
 const App = (): ReactElement => {
   return (
-    <div>
+    <div className="app_wrapper">
       <QuizPage />
     </div>
   );

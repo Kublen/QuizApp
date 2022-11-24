@@ -23,21 +23,19 @@ const Question = ({
   }, [onSubmit, selectedVal]);
 
   return (
-    <div className="">
-      {question.question}
-      <div>
-        {question.answers.map((answer, index) => {
-          return (
-            <QuestionInput
-              key={`key_${index}`}
-              answer={answer}
-              index={index}
-              selectedVal={selectedVal}
-              setSelectedVal={setSelectedVal}
-            />
-          );
-        })}
-      </div>
+    <div className="question__wrapper">
+      <h2>Question: {question.question}?</h2>
+      {question.answers.map((answer, index) => {
+        return (
+          <QuestionInput
+            key={`key_${index}`}
+            answer={answer}
+            index={index}
+            selectedVal={selectedVal}
+            setSelectedVal={setSelectedVal}
+          />
+        );
+      })}
       <QuestionButton
         isDisabled={!selectedVal}
         isLastQuestion={isLastQuestion}

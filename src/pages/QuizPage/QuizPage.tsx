@@ -9,46 +9,55 @@ import {
 import "./QuizPage.styles.scss";
 
 const QuizPage = (): ReactElement => {
-  const [questions, setQuestions] = useState<TQuestion[]>([]);
+  const [questions, setQuestions] = useState<TQuestion[] | null>(null);
   const [userAnswers, setUserAnswers] = useState<number[]>([]);
   const [correctAnswers, setCorrectAnswers] = useState<number[] | null>(null);
   const [step, setStep] = useState<number>(0);
 
   useEffect(() => {
-    fetchQuestions().then((data) => {
-      setQuestions(data);
-    });
-  }, []);
+    if (!questions) {
+      fetchQuestions().then((data) => {
+        setQuestions(data);
+      });
+    }
+  }, [questions]);
 
   const onSubmit = useCallback(
     (value: number) => {
       const newAnswers = [...userAnswers, value];
       setUserAnswers(newAnswers);
-      if (step === questions.length - 1) {
+      if (questions && step === questions.length - 1) {
         fetchCorrectAnswers().then((data) => {
           setCorrectAnswers(data);
         });
       }
       setStep(step + 1);
     },
-    [questions.length, step, userAnswers]
+    [questions, step, userAnswers]
   );
 
   return (
     <div className="quiz-page__wrapper">
       <div className="quiz-page__content">
-        {step < questions.length ? (
+        {questions && (
           <>
-            {questions[step] && (
-              <Question
-                question={questions[step]}
-                onSubmit={onSubmit}
-                isLastQuestion={step === questions.length - 1}
+            {step < questions.length ? (
+              <>
+                {questions[step] && (
+                  <Question
+                    question={questions[step]}
+                    onSubmit={onSubmit}
+                    isLastQuestion={step === questions.length - 1}
+                  />
+                )}
+              </>
+            ) : (
+              <Results
+                userAnswers={userAnswers}
+                correctAnswers={correctAnswers}
               />
             )}
           </>
-        ) : (
-          <Results userAnswers={userAnswers} correctAnswers={correctAnswers} />
         )}
       </div>
     </div>

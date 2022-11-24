@@ -8,6 +8,10 @@ Files with questions, answers and correct answers are stored in `/public/db` dir
 
 In the project directory, you can run:
 
+to install all dependencies:
+### `npm install`
+
+to start the app locally:
 ### `npm start`
 
 Runs the app in the development mode.\

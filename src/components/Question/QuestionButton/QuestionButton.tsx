@@ -13,7 +13,7 @@ const QuestionButton = ({
 }: Props): ReactElement => {
   return (
     <button disabled={isDisabled} onClick={() => onSubmit()}>
-      {!isLastQuestion ? <>NEXT</> : <>FINISH</>}
+      {!isLastQuestion ? <>Next</> : <>Finish</>}
     </button>
   );
 };

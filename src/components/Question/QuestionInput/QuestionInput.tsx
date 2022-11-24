@@ -14,7 +14,7 @@ const QuestionInput = ({
   setSelectedVal,
 }: Props): ReactElement => {
   return (
-    <div className="">
+    <div>
       <input
         type="radio"
         checked={selectedVal === answer}

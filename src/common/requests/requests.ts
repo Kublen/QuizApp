@@ -1,4 +1,5 @@
 import axios from "axios";
+import { AppEndpoints } from "../../AppEndpoints";
 import { TQuestion } from "../interfaces/interfaces";
 
 const questionsMapper = (
@@ -15,12 +16,12 @@ const questionsMapper = (
 };
 
 export const fetchQuestions = async (): Promise<TQuestion[]> => {
-  const questionsResponse = await axios.get<string[]>("/db/questions.json");
-  const answerResponse = await axios.get<number[][]>("/db/answers.json");
+  const questionsResponse = await axios.get<string[]>(AppEndpoints.questions);
+  const answerResponse = await axios.get<number[][]>(AppEndpoints.answers);
   return questionsMapper(questionsResponse.data, answerResponse.data);
 };
 
 export const fetchCorrectAnswers = async (): Promise<number[]> => {
-  const response = await axios.get<number[]>("/db/correctAnswers.json");
+  const response = await axios.get<number[]>(AppEndpoints.correctAnswers);
   return response.data;
 };

@@ -7,7 +7,7 @@ type Props = {
 };
 
 const Results = ({ userAnswers, correctAnswers }: Props): ReactElement => {
-  const [gradePercent, setGradePercent] = useState<number>(0);
+  const [gradePercent, setGradePercent] = useState<number | null>(null);
 
   const calculateGradePercent = useCallback(() => {
     if (correctAnswers) {
@@ -20,13 +20,13 @@ const Results = ({ userAnswers, correctAnswers }: Props): ReactElement => {
     return 0;
   }, [correctAnswers, userAnswers]);
 
-  const selectGradeLabel = useCallback(() => {
-    if (gradePercent >= 0 && gradePercent <= 40) return "Diligent failure";
-    if (gradePercent >= 41 && gradePercent <= 60) return "Failed";
-    if (gradePercent >= 61 && gradePercent <= 80) return "Good";
-    if (gradePercent >= 81 && gradePercent <= 90) return "Very good";
-    if (gradePercent >= 91 && gradePercent <= 100) return "Excellent";
-  }, [gradePercent]);
+  const selectGradeLabel = useCallback((grade: number) => {
+    if (grade >= 0 && grade <= 40) return "Diligent failure";
+    if (grade >= 41 && grade <= 60) return "Failed";
+    if (grade >= 61 && grade <= 80) return "Good";
+    if (grade >= 81 && grade <= 90) return "Very good";
+    if (grade >= 91 && grade <= 100) return "Excellent";
+  }, []);
 
   useEffect(() => {
     if (correctAnswers) {
@@ -37,8 +37,12 @@ const Results = ({ userAnswers, correctAnswers }: Props): ReactElement => {
 
   return (
     <div className="results__wrapper">
-      <h3>END SCORE: {gradePercent}%</h3>
-      <h1>{selectGradeLabel()?.toUpperCase()}</h1>
+      {gradePercent && (
+        <>
+          <h3>END SCORE: {gradePercent}%</h3>
+          <h1>{selectGradeLabel(gradePercent)?.toUpperCase()}</h1>
+        </>
+      )}
     </div>
   );
 };
